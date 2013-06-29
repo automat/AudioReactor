@@ -1,4 +1,4 @@
-function MusicHandler()
+function AudioHandler()
 {
     var context      = this._context      = new webkitAudioContext();
     var source       = this._source       = context.createBufferSource();
@@ -8,11 +8,10 @@ function MusicHandler()
         nodeAnalyser.fftSize = 2048;
 
     this._dataAnalyser = new Uint8Array(nodeAnalyser.frequencyBinCount);
-    this._fftSmoothing = 0.85;
 
     this._buffer    = null;
-    this._volume    = 0.5;
-    this._volMinMax = [0,1];
+    this.volume    = 0.5;
+    this.volMinMax = [0,1];
 
     source.connect(context.destination);
     source.connect(nodeGain);
@@ -25,7 +24,7 @@ function MusicHandler()
 
 }
 
-MusicHandler.prototype.loadAudioData = function(data,callback)
+AudioHandler.prototype.loadAudioData = function(data,callback)
 {
     this._context.decodeAudioData(data,function(buffer)
     {
@@ -35,12 +34,12 @@ MusicHandler.prototype.loadAudioData = function(data,callback)
     }.bind(this));
 };
 
-MusicHandler.prototype.update = function()
+AudioHandler.prototype.update = function()
 {
     this._getAverageMagnitude();
 };
 
-MusicHandler.prototype._getAverageMagnitude = function()
+AudioHandler.prototype._getAverageMagnitude = function()
 {
     var dataAnalyser = this._dataAnalyser,
         dataLen      = dataAnalyser.length;
@@ -55,6 +54,7 @@ MusicHandler.prototype._getAverageMagnitude = function()
     this.magnitudeAvg /= dataLen;
 };
 
-MusicHandler.prototype.play      = function(){this._source.start(0);};
-MusicHandler.prototype.stop      = function(){this._source.stop(0);}
-MusicHandler.prototype.setVolume = function(val){this._nodeGain.gain.value = val;};
+AudioHandler.prototype.play      = function(){this._source.start(0);};
+AudioHandler.prototype.stop      = function(){this._source.stop(0);}
+AudioHandler.prototype.setVolume = function(val){this._nodeGain.gain.value = val;};
+AudioHandler.prototype.updateVolume = function(){this._nodeGain.gain.value = this.volume;};
