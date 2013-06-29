@@ -1,0 +1,11 @@
+{
+    "name":                      "ControlKit Grapher",
+    "version" :                  "0.0",
+    "manifest_version":          2,
+    "minimum_chrome_version":    "23",
+    "description" :              "",
+    "app":                       {"background":{"scripts":["main.js"]}},
+    "permissions":               [{"fileSystem": ["write"]},"tts"],
+    "web_accessible_resources" : ["app/resource/sample.mp3"],
+    "sandbox":                   {"pages":["app/sandbox.html"]}
+}
