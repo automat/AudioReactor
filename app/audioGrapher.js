@@ -199,13 +199,15 @@ function AudioGrapher(div)
                           'Plane',
                           'Blobby Sphere',
                           'Drop',
-                          'Jellyfish'];
+                          'Jellyfish',
+                          'Diffuse Plane'];
 
     this._presetValues = [{uRange:[-PI,PI],vRange:[0,2*PI],x:"cos(u)*cos(v)",y:"sin(u)",z:"cos(u)*sin(v)"},
                           {uRange:[-1,1],  vRange:[-1,1],  x:"u",y:"0",z:"v"},
                           {uRange:[-PI,PI],vRange:[0,2*PI],x:"cos(u)*cos(v)*(1+0.15*sin(u*5+10*t)*sin(v*5+10*t))",y:"sin(u)*(1+0.15*sin(u*5+10*t)*sin(v*5+10*t))",z:"cos(u)*sin(v)*(1+0.15*sin(u*5+10*t)*sin(v*5+10*t))"},
                           {uRange:[0,2],   vRange:[0,2*PI],x:"u*cos(v)",y:"exp(-u*u*2*sin(t))*(sin(2*PI*u+t*10) - u*cos(3*v+t*10))",z:"u*sin(v)"},
-                          {uRange:[-PI,PI],vRange:[0,2*PI],x:"cos(u)*cos(v)",y:"sin(u)",z:"cos(u)*sin(v)",scaleX:'1+sin(u+t*4)*0.5+1',scaleY:'1+sin(u+t*4)*sin(v*10)*0.5+1',scaleZ:'1+sin(u+t*4)*0.5+1'}];
+                          {uRange:[-PI,PI],vRange:[0,2*PI],x:"cos(u)*cos(v)",y:"sin(u)",z:"cos(u)*sin(v)",scaleX:'1+sin(u+t*4)*0.5+1',scaleY:'1+sin(u+t*4)*sin(v*10)*0.5+1',scaleZ:'1+sin(u+t*4)*0.5+1'},
+                          {uRange:[-1,1],  vRange:[-1,1],  x:"u",y:"1",z:"v",scaleX:'-10+3*m',scaleY:'1+sin(bv*bu*20)*cos(v)',scaleZ:'10-3*m'}];
 
     this.uRangeTarget0 = [-Math.PI,Math.PI];
     this.vRangeTarget0 = [0,2*Math.PI];
@@ -242,6 +244,13 @@ function AudioGrapher(div)
     this.functionXTarget1 = null;
     this.functionYTarget1 = null;
     this.functionZTarget1 = null;
+
+    this._functionXTarget0Base = null;
+    this._functionYTarget0Base = null;
+    this._functionZTarget0Base = null;
+    this._functionXTarget1Base = null;
+    this._functionYTarget1Base = null;
+    this._functionZTarget1Base = null;
 
     this._magnitudeAvg    = 1;
     this._magnitudeBuffer0 = new Array(this.geomResX);
@@ -289,10 +298,6 @@ function AudioGrapher(div)
                                             16,17,18,16,18,19,
                                             20,21,22,20,22,23]);
 
-    this._parametricFunctionX = null;
-    this._parametricFunctionY = null;
-    this._parametricFunctionY = null;
-
     var uvResTotal = this.geomResX * this.geomResY;
 
     this._uvVertices = new Float32Array(uvResTotal * this._SIZE_OF_VERTEX);
@@ -304,7 +309,6 @@ function AudioGrapher(div)
     this._uvShowNormalsColors   = new Float32Array(this._uvShowNormalsVertices.length*2);
 
     this._timer = 0.0;
-
 
 
     /*---------------------------------------------------------------------------------*/
