@@ -1,16 +1,14 @@
 chrome.app.runtime.onLaunched.addListener(function() {
 
-    var screenWidth = screen.availWidth;
-    var screenHeight = screen.availHeight;
-    var width  = 1024;
-    var height =  768;
+    var width  = 1024,
+        height =  768;
 
     chrome.app.window.create('index.html', {
         bounds: {
             width: width,
             height: height,
-            left: screenWidth,
-            top: 0
+            left: screen.availWidth  * 0.5 - width*0.5,
+            top:  screen.availHeight * 0.5 - height*0.5
         }
     });
 });
