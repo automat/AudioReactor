@@ -1,4 +1,4 @@
-function AudioGrapher(div)
+function MusicGrapher(div)
 {
     this._glCanvas = document.createElement('canvas');
 
@@ -111,7 +111,7 @@ function AudioGrapher(div)
 
     this._uPointSize         = gl.getUniformLocation(program,"PointSize");
 
-    this._light0 = new AudioGrapher.Light().set([0,0,0],
+    this._light0 = new MusicGrapher.Light().set([0,0,0],
                                                 [26.0/255.0,52.0/255.0,38.0/255.0],
                                                 [204.0/255.0,230.0/255.0,242.0/255.0],
                                                 [140.0/255.0,217.0/255.0,115.0/255.0],2.0);
@@ -181,7 +181,7 @@ function AudioGrapher(div)
     this.lightCubeRender    = false;
     this.lightRotate        = true;
 
-    this.uvMaterial = true;
+    this.uvMaterial = false;
 
     this.cameraLocX = this._camLoc[0];
     this.cameraLocY = this._camLoc[1];
@@ -325,7 +325,7 @@ function AudioGrapher(div)
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype.setMagnitudeAvg = function(val)
+MusicGrapher.prototype.setMagnitudeAvg = function(val)
 {
     var buffer0 = this._magnitudeBuffer0,
         buffer1 = this._magnitudeBuffer1,
@@ -341,7 +341,7 @@ AudioGrapher.prototype.setMagnitudeAvg = function(val)
     }
 };
 
-AudioGrapher.prototype.update = function()
+MusicGrapher.prototype.update = function()
 {
     this._timer+=0.01;
 
@@ -394,7 +394,7 @@ AudioGrapher.prototype.update = function()
 
 };
 
-AudioGrapher.prototype._applyPlotFunction = function()
+MusicGrapher.prototype._applyPlotFunction = function()
 {
     var uvResX = this.geomResX,
         uvResY = this.geomResY,
@@ -585,14 +585,14 @@ AudioGrapher.prototype._applyPlotFunction = function()
     }
 };
 
-AudioGrapher.prototype._pararmetricPlotFunctionIsValid = function()
+MusicGrapher.prototype._pararmetricPlotFunctionIsValid = function()
 {
     return !isNaN(this._uvVertices[0]) && !isNaN(this._uvVertices[1]) && !isNaN(this._uvVertices[2]);
 };
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype.setupSurface = function()
+MusicGrapher.prototype.setupSurface = function()
 {
     var uvResX = this.geomResX,
         uvResY = this.geomResY,
@@ -655,7 +655,7 @@ AudioGrapher.prototype.setupSurface = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._updateSurfaceNormals = function()
+MusicGrapher.prototype._updateSurfaceNormals = function()
 {
     var uvIndices  = this._uvIndices,
         uvVertices = this._uvVertices,
@@ -741,7 +741,7 @@ AudioGrapher.prototype._updateSurfaceNormals = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._showSurfaceNormals = function()
+MusicGrapher.prototype._showSurfaceNormals = function()
 {
 
     var uvVertices = this._uvVertices,
@@ -775,14 +775,14 @@ AudioGrapher.prototype._showSurfaceNormals = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._autoRotateCamera = function()
+MusicGrapher.prototype._autoRotateCamera = function()
 {
     var t = this._timer;
     this.cameraLocX = cos(t);
     this.cameraLocZ = sin(t);
 };
 
-AudioGrapher.prototype._updateCamera = function()
+MusicGrapher.prototype._updateCamera = function()
 {
     var zoom = this.cameraZoom;
 
@@ -791,7 +791,7 @@ AudioGrapher.prototype._updateCamera = function()
                          this.cameraLocZ * zoom);
 };
 
-AudioGrapher.prototype._updateLight = function()
+MusicGrapher.prototype._updateLight = function()
 {
     var t = this._timer;
 
@@ -814,7 +814,7 @@ AudioGrapher.prototype._updateLight = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._drawGrid = function()
+MusicGrapher.prototype._drawGrid = function()
 {
     var i,l;
     i = -1;
@@ -837,7 +837,7 @@ AudioGrapher.prototype._drawGrid = function()
     this._popMatrix();
 };
 
-AudioGrapher.prototype._drawLight = function()
+MusicGrapher.prototype._drawLight = function()
 {
     var vector = this._light0.position,
         size   = 0.125;
@@ -855,30 +855,30 @@ AudioGrapher.prototype._drawLight = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._setPointSize = function(f)
+MusicGrapher.prototype._setPointSize = function(f)
 {
     this.gl.uniform1f(this._uPointSize,f);
 };
 
-AudioGrapher.prototype._resetPointSize = function()
+MusicGrapher.prototype._resetPointSize = function()
 {
     this.gl.uniform1f(this._uPointSize,1.0);
 };
 
 
-AudioGrapher.prototype._enableLighting = function()
+MusicGrapher.prototype._enableLighting = function()
 {
     this.gl.uniform1f(this._uUseLighting,1.0);
     this._lighting = true;
 };
 
-AudioGrapher.prototype._disableLighting = function()
+MusicGrapher.prototype._disableLighting = function()
 {
     this.gl.uniform1f(this._uUseLighting,0.0);
     this._lighting = false;
 };
 
-AudioGrapher.prototype._updateLightUniforms = function(light)
+MusicGrapher.prototype._updateLightUniforms = function(light)
 {
     var gl = this.gl;
 
@@ -892,7 +892,7 @@ AudioGrapher.prototype._updateLightUniforms = function(light)
 /*---------------------------------------------------------------------------------*/
 
 
-AudioGrapher.prototype._cube = function(vector,size)
+MusicGrapher.prototype._cube = function(vector,size)
 {
     this._pushMatrix();
     this._translate(vector[0],vector[1],vector[2]);
@@ -901,7 +901,7 @@ AudioGrapher.prototype._cube = function(vector,size)
     this._popMatrix();
 };
 
-AudioGrapher.prototype._line = function(vertices)
+MusicGrapher.prototype._line = function(vertices)
 {
     var gl = this.gl;
 
@@ -926,7 +926,7 @@ AudioGrapher.prototype._line = function(vertices)
     this._drawArrays(v,null,this._fillColorBuffer(this._bColor,this._bColorLine),null,this._LINES,0,2);
 };
 
-AudioGrapher.prototype._rect = function(vector,width,height)
+MusicGrapher.prototype._rect = function(vector,width,height)
 {
     var gl = this.gl;
 
@@ -951,7 +951,7 @@ AudioGrapher.prototype._rect = function(vector,width,height)
     this._drawArrays(v,null,this._fillColorBuffer(this._bColor,this._bColorRect),null,this._LINE_LOOP,0,4);
 };
 
-AudioGrapher.prototype._point = function(vector)
+MusicGrapher.prototype._point = function(vector)
 {
     var gl = this.gl;
 
@@ -964,7 +964,7 @@ AudioGrapher.prototype._point = function(vector)
     this._drawArrays(v,null,this._fillColorBuffer(this._bColor,this._bColorPoint),null,this._POINTS,0,1);
 };
 
-AudioGrapher.prototype._drawPoint = function(loc,scale)
+MusicGrapher.prototype._drawPoint = function(loc,scale)
 {
     this._pushMatrix();
     this._color4f(1,0,0,1);
@@ -977,7 +977,7 @@ AudioGrapher.prototype._drawPoint = function(loc,scale)
 
 };
 
-AudioGrapher.prototype._drawVector = function(loc,vector,scale)
+MusicGrapher.prototype._drawVector = function(loc,vector,scale)
 {
     this._line([loc[0],loc[1],loc[2],loc[0]+vector[0] * scale,loc[1]+vector[1] * scale,loc[2]+vector[2] * scale]);
 };
@@ -985,7 +985,7 @@ AudioGrapher.prototype._drawVector = function(loc,vector,scale)
 /*---------------------------------------------------------------------------------*/
 
 
-AudioGrapher.prototype._drawElements = function(vertices,normals,colors,uvs,indices,mode)
+MusicGrapher.prototype._drawElements = function(vertices,normals,colors,uvs,indices,mode)
 {
     mode = mode || this._TRIANGLES;
 
@@ -998,14 +998,14 @@ AudioGrapher.prototype._drawElements = function(vertices,normals,colors,uvs,indi
 
 };
 
-AudioGrapher.prototype._drawArrays = function(vertices,normals,colors,uvs,mode,first,count)
+MusicGrapher.prototype._drawArrays = function(vertices,normals,colors,uvs,mode,first,count)
 {
     this._fillArrayBuffer(vertices,normals,colors,uvs);
     this._setMatricesUniform();
     this.gl.drawArrays(mode,first,count);
 };
 
-AudioGrapher.prototype._fillArrayBuffer = function(vertexFloat32Array,normalFloat32Array,colorFloat32Array,uvFloat32Array)
+MusicGrapher.prototype._fillArrayBuffer = function(vertexFloat32Array,normalFloat32Array,colorFloat32Array,uvFloat32Array)
 {
 
     var na  = normalFloat32Array ? true : false,
@@ -1046,12 +1046,12 @@ AudioGrapher.prototype._fillArrayBuffer = function(vertexFloat32Array,normalFloa
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._colorv = function(v)
+MusicGrapher.prototype._colorv = function(v)
 {
     this._bColor = v;
 };
 
-AudioGrapher.prototype._color4f = function(r,g,b,a)
+MusicGrapher.prototype._color4f = function(r,g,b,a)
 {
     var c = this._bColor4f;
 
@@ -1063,7 +1063,7 @@ AudioGrapher.prototype._color4f = function(r,g,b,a)
     this._bColor = c;
 };
 
-AudioGrapher.prototype._fillColorBuffer = function(color,buffer)
+MusicGrapher.prototype._fillColorBuffer = function(color,buffer)
 {
     var i = 0;
 
@@ -1101,12 +1101,12 @@ AudioGrapher.prototype._fillColorBuffer = function(color,buffer)
 /*---------------------------------------------------------------------------------*/
 
 
-AudioGrapher.prototype._updateCameraMatrix = function()
+MusicGrapher.prototype._updateCameraMatrix = function()
 {
     this._mModelView = mat44LookAt(this._mModelView,this._camLoc, this._camTarget, this._camUp);
 };
 
-AudioGrapher.prototype._setMatricesUniform = function()
+MusicGrapher.prototype._setMatricesUniform = function()
 {
     this.gl.uniformMatrix4fv(this._uModelViewMatrix,   false,this._mModelView);
     this.gl.uniformMatrix4fv(this._uPerspectiveMatrix,false,this._mPerspective);
@@ -1122,12 +1122,12 @@ AudioGrapher.prototype._setMatricesUniform = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._pushMatrix = function()
+MusicGrapher.prototype._pushMatrix = function()
 {
     this._mStack.push(mat44Copy(this._mModelView));
 };
 
-AudioGrapher.prototype._popMatrix = function()
+MusicGrapher.prototype._popMatrix = function()
 {
     var s = this._mStack;
 
@@ -1138,37 +1138,37 @@ AudioGrapher.prototype._popMatrix = function()
     return this._mModelView;
 };
 
-AudioGrapher.prototype._loadIdentity = function()
+MusicGrapher.prototype._loadIdentity = function()
 {
     mat44Identity(this._mModelView);
 };
 
-AudioGrapher.prototype._translate = function(x,y,z)
+MusicGrapher.prototype._translate = function(x,y,z)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44Translate(x,y,z));
 };
 
-AudioGrapher.prototype._scale = function(x,y,z)
+MusicGrapher.prototype._scale = function(x,y,z)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44Scale(x,y,z));
 };
 
-AudioGrapher.prototype._rotateX = function(a)
+MusicGrapher.prototype._rotateX = function(a)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44RotationX(a));
 };
 
-AudioGrapher.prototype._rotateY = function(a)
+MusicGrapher.prototype._rotateY = function(a)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44RotationY(a));
 };
 
-AudioGrapher.prototype._rotateZ = function(a)
+MusicGrapher.prototype._rotateZ = function(a)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44RotationZ(a));
 };
 
-AudioGrapher.prototype._rotateXYZ = function(ax,ay,az)
+MusicGrapher.prototype._rotateXYZ = function(ax,ay,az)
 {
     this._mModelView = mat44MultPost(this._mModelView,mat44RotatationXYZ(ax,ay,az));
 };
@@ -1176,7 +1176,7 @@ AudioGrapher.prototype._rotateXYZ = function(ax,ay,az)
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype.setSize = function(width,height)
+MusicGrapher.prototype.setSize = function(width,height)
 {
     var glc = this._glCanvas;
 
@@ -1198,13 +1198,13 @@ AudioGrapher.prototype.setSize = function(width,height)
     this._clearColorAndDepthBuffer();
 };
 
-AudioGrapher.prototype._resetBlendFunc = function()
+MusicGrapher.prototype._resetBlendFunc = function()
 {
     var gl = this.gl;
     gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
 };
 
-AudioGrapher.prototype._clearColorAndDepthBuffer = function()
+MusicGrapher.prototype._clearColorAndDepthBuffer = function()
 {
     var gl  = this.gl,
         bgcfa = this._bColorBg,
@@ -1221,7 +1221,7 @@ AudioGrapher.prototype._clearColorAndDepthBuffer = function()
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype._loadShader = function(source,type)
+MusicGrapher.prototype._loadShader = function(source,type)
 {
     var gl = this.gl;
     var shader = gl.createShader(type);
@@ -1240,7 +1240,7 @@ AudioGrapher.prototype._loadShader = function(source,type)
     return shader;
 };
 
-AudioGrapher.prototype._loadProgram = function(vertexShader,fragmentShader)
+MusicGrapher.prototype._loadProgram = function(vertexShader,fragmentShader)
 {
     var gl = this.gl;
     var program = gl.createProgram();
@@ -1259,7 +1259,7 @@ AudioGrapher.prototype._loadProgram = function(vertexShader,fragmentShader)
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.Light = function()
+MusicGrapher.Light = function()
 {
     this.position      = new Float32Array([0,0,0]);
     this.colorAmbient  = new Float32Array([0,0,0]);
@@ -1274,7 +1274,7 @@ AudioGrapher.Light = function()
     this.uShininess     = null;
 };
 
-AudioGrapher.Light.prototype.set = function(position,colorAmbient,colorDiffuse,colorSpecular,shininess)
+MusicGrapher.Light.prototype.set = function(position,colorAmbient,colorDiffuse,colorSpecular,shininess)
 {
     vec3SetVec3(this.position,position);
     vec3SetVec3(this.colorAmbient,colorAmbient);
@@ -1287,7 +1287,7 @@ AudioGrapher.Light.prototype.set = function(position,colorAmbient,colorDiffuse,c
 
 /*---------------------------------------------------------------------------------*/
 
-AudioGrapher.prototype.applyParametricPresetTarget0 = function(index)
+MusicGrapher.prototype.applyParametricPresetTarget0 = function(index)
 {
     var presetValues = this._presetValues[index];
 
@@ -1309,7 +1309,7 @@ AudioGrapher.prototype.applyParametricPresetTarget0 = function(index)
     this.updateParametricFunction0();
 };
 
-AudioGrapher.prototype.updateParametricFunction0 = function()
+MusicGrapher.prototype.updateParametricFunction0 = function()
 {
     var scaleX = this.functionXTarget0ScaleString != '' ? ('*(' + this.functionXTarget0ScaleString +')'): '',
         scaleY = this.functionYTarget0ScaleString != '' ? ('*(' + this.functionYTarget0ScaleString +')'): '',
@@ -1327,7 +1327,7 @@ AudioGrapher.prototype.updateParametricFunction0 = function()
 
 };
 
-AudioGrapher.prototype.applyParametricPresetTarget1 = function(index)
+MusicGrapher.prototype.applyParametricPresetTarget1 = function(index)
 {
     var presetValues = this._presetValues[index];
 
@@ -1348,7 +1348,7 @@ AudioGrapher.prototype.applyParametricPresetTarget1 = function(index)
     this.updateParametricFunction1();
 };
 
-AudioGrapher.prototype.updateParametricFunction1 = function()
+MusicGrapher.prototype.updateParametricFunction1 = function()
 {
     var scaleX       = this.functionXTarget1ScaleString     != '' ? ('*(' + this.functionXTarget1ScaleString +')') : '',
         scaleY       = this.functionYTarget1ScaleString     != '' ? ('*(' + this.functionYTarget1ScaleString +')') : '',
@@ -1363,14 +1363,14 @@ AudioGrapher.prototype.updateParametricFunction1 = function()
 
 };
 
-AudioGrapher.prototype._setParametricFunctionTarget0 = function(fx,fy,fz)
+MusicGrapher.prototype._setParametricFunctionTarget0 = function(fx,fy,fz)
 {
     try{this.functionXTarget0 = new Function('u','v','t','m','bu','bv','return ' + fx );}catch(e){}
     try{this.functionYTarget0 = new Function('u','v','t','m','bu','bv','return ' + fy );}catch(e){}
     try{this.functionZTarget0 = new Function('u','v','t','m','bu','bv','return ' + fz );}catch(e){}
 };
 
-AudioGrapher.prototype._setParametricFunctionTarget1 = function(fx,fy,fz)
+MusicGrapher.prototype._setParametricFunctionTarget1 = function(fx,fy,fz)
 {
     try{this.functionXTarget1 = new Function('u','v','t','m','bu','bv','return ' + fx +';');}catch(e){}
     try{this.functionYTarget1 = new Function('u','v','t','m','bu','bv','return ' + fy +';');}catch(e){}

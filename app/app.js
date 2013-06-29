@@ -1,34 +1,37 @@
+window.onload = function()
+{
+    var sampleUrl = chrome.runtime.getURL('app/resource/sample.mp3');
+    var sandbox   = document.getElementById('sandbox');
 
-(function(){
-
-    var fsOptions = {type:'openFile',accepts:[{extensions:['mp3']}]};
-
-    var sandbox;
-
-    window.onload = function (){sandbox = document.getElementById('sandbox');postMessage({type:'INIT'});};
-    window.addEventListener('message', function (event)
-    {
-        if (event.data.type != 'LOAD')return;
-
-        chrome.fileSystem.chooseEntry(fsOptions,function (fileEntry)
+    var request = new XMLHttpRequest();
+        request.overrideMimeType('application/octet-stream');
+        request.open('GET',sampleUrl,true);
+        request.responseType = 'arraybuffer';
+        request.onreadystatechange = function()
         {
-            if (fileEntry){fileEntry.file(function(file)
+            if(this.readyState == 4 && this.status == 200)
             {
-                var reader = new FileReader();
-                    reader.onload = function(e)
-                    {
-                        postMessage({type: 'FILE_LOADED', audioData: e.target.result});
-                    };
+                var response = this.response;
+                if(response){sandbox.contentWindow.postMessage({type:'INIT',audioData:response},'*');}
+            }
+        };
 
-                    reader.readAsArrayBuffer(file);
+        request.send();
+};
 
+window.addEventListener('message',function(event)
+{
+    if(event.data.type != 'LOAD')return;
 
-            })}
-            else postMessage({type: 'NO_FILE_LOADED'});
+    chrome.fileSystem.chooseEntry(
+        {
+            type: 'openFile', accepts:[{
+            extensions: ['mp3']
+        }]
+        },
+        function(fileEntry)
+        {
+
         });
 
-    });
-
-    function postMessage(msg){sandbox.contentWindow.postMessage(msg,'*');}
-
-}());
+});
