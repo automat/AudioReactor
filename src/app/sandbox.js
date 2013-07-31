@@ -32,6 +32,119 @@
 
         /*---------------------------------------------------------------------------------*/
 
+        var controlKit = new ControlKit.Kit();
+
+        var panel = controlKit.addPanel({width:225,align:'left',label:'Settings World'});
+        var group = panel.addGroup({label:'Environment'});
+            group.addSubGroup()
+                 .addColor(audioGrapher,'backgroundColor',{label:'BG Color',colorMode:'rgbfv'})
+                 .addCheckbox(audioGrapher,'gridEnabled',{label:'Grid'})
+                 .addColor(audioGrapher,'gridColor',{colorMode:'rgbfv',label:'color'})
+                 .addCheckbox(audioGrapher,'gridAxesEnabled',{label:'Axes'})
+                 .addCheckbox(audioGrapher,'gridCubeEnabled',{label:'Room'})
+                 .addNumberInput(audioGrapher,'gridSize',{label:'Size'})
+
+            group.addSubGroup({label:'Time'})
+                 .addSlider(audioGrapher,'timeScale','timeScaleRange');
+
+            group = panel.addGroup({label:'Lighting'});
+            group.addSubGroup({label:'Global',enable:false})
+                 .addCheckbox(audioGrapher,'lightEnabled',{label:'enable'})
+                 .addCheckbox(audioGrapher,'lightSetPosGlobal',{label:'Position'})
+                    .addNumberInput(audioGrapher,'lightPosGlobalX',{label:'X'})
+                    .addNumberInput(audioGrapher,'lightPosGlobalY',{label:'Y'})
+                    .addNumberInput(audioGrapher,'lightPosGlobalZ',{label:'Z'})
+                 .addCheckbox(audioGrapher,'lightSetColorAmbientGlobal',{label:'C Amb'})
+                    .addColor(audioGrapher,'lightColorAmbientGlobal',{label:' ',colorMode:'rgbfv'})
+                 .addCheckbox(audioGrapher,'lightSetColorDiffuseGlobal',{label:'C Dif'})
+                    .addColor(audioGrapher,'lightColorDiffuseGlobal',{label:' ',colorMode:'rgbfv'})
+                 .addCheckbox(audioGrapher,'lightSetColorSpecularGlobal',{label:'C Spe'})
+                    .addColor(audioGrapher,'lightColorSpecularGlobal',{label:' ',colorMode:'rgbfv'})
+                 .addCheckbox(audioGrapher,'lightSetAttConstantGlobal',{label:'Att Con'})
+                    .addNumberInput(audioGrapher,'lightAttConstantGlobal',{label:' '})
+                 .addCheckbox(audioGrapher,'lightSetAttLinearGlobal',{label:'Att Lin'})
+                    .addNumberInput(audioGrapher,'lightAttLinearGlobal',{label:' '})
+                 .addCheckbox(audioGrapher,'lightSetAttQuadraticGlobal',{label:'Att Qua'})
+                    .addNumberInput(audioGrapher,'lightAttQuadraticGlobal',{label:' '});
+
+            group.addSubGroup({label:'Light 0'})
+                 .addCheckbox(audioGrapher,'light0Enabled',{label:'enable'})
+                    .addCheckbox(audioGrapher,'light0Show',{label:'debug'})
+                    .addStringInput(audioGrapher,'light0FuncXString',{label:'X',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncYString',{label:'Y',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncZString',{label:'Z',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light0Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light0Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light0Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncAttConString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncAttLinString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)});
+
+            group.addSubGroup({label:'Light 1'})
+                 .addCheckbox(audioGrapher,'light1Enabled',{label:'enable'})
+                    .addCheckbox(audioGrapher,'light1Show',{label:'debug'})
+                    .addStringInput(audioGrapher,'light1FuncXString',{label:'X',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncYString',{label:'Y',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncZString',{label:'Z',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light1Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light1Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light1Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncAttConString', {label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncAttLinString',   {label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)});
+
+            group.addSubGroup({label:'Light 2'})
+                 .addCheckbox(audioGrapher,'light2Enabled',{label:'enable'})
+                    .addCheckbox(audioGrapher,'light2Show',{label:'debug'})
+                    .addStringInput(audioGrapher,'light2FuncXString',{label:'X',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncYString',{label:'Y',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncZString',{label:'Z',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light2Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light2Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
+                    .addColor(audioGrapher,'light2Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncAttConString', {label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncAttLinString',   {label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)});
+
+            panel = controlKit.addPanel({label:'Settings Surface',width:220,align:'right'});
+            group = panel.addGroup({label:'General'});
+            group.addSubGroup({label:'Render'})
+                 .addCheckbox(audioGrapher,'surfaceRenderGeometry',{label:'Surface'})
+                 .addCheckbox(audioGrapher,'surfaceRenderWireframe',{label:'Wireframe'})
+                 .addCheckbox(audioGrapher,'surfaceRenderNormals',  {label:'Normals'})
+                 .addNumberInput(audioGrapher,'surfaceSize',{label:'size',onChange:audioGrapher.onSurfaceSizeChange.bind(audioGrapher)})
+
+            group = panel.addGroup({label:'Surface 0'});
+            group.addSubGroup({label:'f(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface0FuncXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface0FuncYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface0FuncZString',{label:'z'});
+            group.addSubGroup({label:'fs(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface0FuncScaleXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface0FuncScaleYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface0FuncScaleZString',{label:'z'});
+            group.addSubGroup({label:'ft(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface0FuncTransXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface0FuncTransYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface0FuncTransZString',{label:'z'});
+
+            group = panel.addGroup({label:'Surface 1'});
+            group.addSubGroup({label:'f(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface1FuncXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface1FuncYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface1FuncZString',{label:'z'});
+            group.addSubGroup({label:'fs(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface1FuncScaleXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface1FuncScaleYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface1FuncScaleZString',{label:'z'});
+            group.addSubGroup({label:'ft(u,v,t,m,bu,bv)'})
+                 .addStringInput(audioGrapher,'surface1FuncTransXString',{label:'x'})
+                 .addStringInput(audioGrapher,'surface1FuncTransYString',{label:'y'})
+                 .addStringInput(audioGrapher,'surface1FuncTransZString',{label:'z'});
+
+
+
+        /*
         var updateParametricFunc0 = audioGrapher.updateParametricFunction0.bind(audioGrapher),
             updateParametricFunc1 = audioGrapher.updateParametricFunction1.bind(audioGrapher);
 
@@ -133,6 +246,8 @@
                 .addSubGroup({label:'Magnitude'})
                 .addValuePlotter(audioHandler,'magnitudeAvg',{label:'Avg',height:150})
                 .addNumberInput( audioHandler,'magnitudeMax',{label:'Norm Val'});
+
+        */
 
         /*---------------------------------------------------------------------------------*/
 
