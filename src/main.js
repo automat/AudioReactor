@@ -5,9 +5,9 @@ chrome.app.runtime.onLaunched.addListener(function() {
 
     chrome.app.window.create('index.html', {
         bounds: {
-            width: width,
-            height: height,
-            left: screen.availWidth  + width*0.5,
+            width:  screen.availWidth,
+            height:  screen.availHeight,
+            left: 1280  + width*0.5,
             top:  screen.availHeight * 0.5 - height*0.5
         }
     });

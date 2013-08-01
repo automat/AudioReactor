@@ -50,6 +50,7 @@
             group = panel.addGroup({label:'Lighting'});
             group.addSubGroup({label:'Global',enable:false})
                  .addCheckbox(audioGrapher,'lightEnabled',{label:'enable'})
+                 .addSelect(audioGrapher,'lightGlobalPresets',{label:'Preset'})
                  .addCheckbox(audioGrapher,'lightSetPosGlobal',{label:'Position'})
                     .addNumberInput(audioGrapher,'lightPosGlobalX',{label:'X'})
                     .addNumberInput(audioGrapher,'lightPosGlobalY',{label:'Y'})
@@ -70,77 +71,93 @@
             group.addSubGroup({label:'Light 0'})
                  .addCheckbox(audioGrapher,'light0Enabled',{label:'enable'})
                     .addCheckbox(audioGrapher,'light0Show',{label:'debug'})
-                    .addStringInput(audioGrapher,'light0FuncXString',{label:'X',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light0FuncYString',{label:'Y',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light0FuncZString',{label:'Z',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addSelect(audioGrapher,'lightPresets',{label:'Preset'})
+                    .addStringInput(audioGrapher,'light0FuncXString',{label:'fx(t,m,i)',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncYString',{label:'fy(t,m,i)',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncZString',{label:'fz(t,m,i)',onChange:audioGrapher.updateLight0FuncPos.bind(audioGrapher)})
                     .addColor(audioGrapher,'light0Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light0Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light0Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight0Color.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light0FuncAttConString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light0FuncAttLinString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light0FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)});
+                    .addStringInput(audioGrapher,'light0FuncAttConString',{label:'fac(t,m,i)',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncAttLinString',{label:'fal(t,m,i)',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light0FuncAttQuaString',{label:'faq(t,m,i)',onChange:audioGrapher.updateLight0FuncAtt.bind(audioGrapher)});
 
             group.addSubGroup({label:'Light 1'})
                  .addCheckbox(audioGrapher,'light1Enabled',{label:'enable'})
                     .addCheckbox(audioGrapher,'light1Show',{label:'debug'})
-                    .addStringInput(audioGrapher,'light1FuncXString',{label:'X',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light1FuncYString',{label:'Y',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light1FuncZString',{label:'Z',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addSelect(audioGrapher,'lightPresets',{label:'Preset'})
+                    .addStringInput(audioGrapher,'light1FuncXString',{label:'fx(t,m,i)',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncYString',{label:'fy(t,m,i)',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncZString',{label:'fz(t,m,i)',onChange:audioGrapher.updateLight1FuncPos.bind(audioGrapher)})
                     .addColor(audioGrapher,'light1Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light1Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light1Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight1Color.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light1FuncAttConString', {label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light1FuncAttLinString',   {label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light1FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)});
+                    .addStringInput(audioGrapher,'light1FuncAttConString', {label:'fac(t,m,i)',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncAttLinString',   {label:'fal(t,m,i)',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light1FuncAttQuaString',{label:'faq(t,m,i)',onChange:audioGrapher.updateLight1FuncAtt.bind(audioGrapher)});
 
             group.addSubGroup({label:'Light 2'})
                  .addCheckbox(audioGrapher,'light2Enabled',{label:'enable'})
                     .addCheckbox(audioGrapher,'light2Show',{label:'debug'})
-                    .addStringInput(audioGrapher,'light2FuncXString',{label:'X',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light2FuncYString',{label:'Y',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light2FuncZString',{label:'Z',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addSelect(audioGrapher,'lightPresets',{label:'Preset'})
+                    .addStringInput(audioGrapher,'light2FuncXString',{label:'fx(t,m,i)',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncYString',{label:'fy(t,m,i)',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncZString',{label:'fz(t,m,i)',onChange:audioGrapher.updateLight2FuncPos.bind(audioGrapher)})
                     .addColor(audioGrapher,'light2Ambient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light2Diffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
                     .addColor(audioGrapher,'light2Specular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateLight2Color.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light2FuncAttConString', {label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light2FuncAttLinString',   {label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
-                    .addStringInput(audioGrapher,'light2FuncAttQuaString',{label:'Att Con',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)});
+                    .addStringInput(audioGrapher,'light2FuncAttConString', {label:'fac(t,m,i)',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncAttLinString',   {label:'fal(t,m,i)',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)})
+                    .addStringInput(audioGrapher,'light2FuncAttQuaString',{label:'faq(t,m,i)',onChange:audioGrapher.updateLight2FuncAtt.bind(audioGrapher)});
 
             panel = controlKit.addPanel({label:'Settings Surface',width:220,align:'right'});
-            group = panel.addGroup({label:'General'});
+            group = panel.addGroup({label:'General',enable:false});
             group.addSubGroup({label:'Render'})
                  .addCheckbox(audioGrapher,'surfaceRenderGeometry',{label:'Surface'})
                  .addCheckbox(audioGrapher,'surfaceRenderWireframe',{label:'Wireframe'})
                  .addCheckbox(audioGrapher,'surfaceRenderNormals',  {label:'Normals'})
                  .addNumberInput(audioGrapher,'surfaceSize',{label:'size',onChange:audioGrapher.onSurfaceSizeChange.bind(audioGrapher)})
+                 .addSubGroup().addSlider(audioGrapher,'surfaceIntrpl','surfaceIntrplMinMax',{label:'Morph'})
+                 .addSubGroup({label:'Material'})
+                 .addColor(audioGrapher,'materialColorAmbient', {label:'C Amb',colorMode:'rgbfv',onChange:audioGrapher.updateSurfaceMaterial.bind(audioGrapher)})
+                 .addColor(audioGrapher,'materialColorDiffuse', {label:'C Dif',colorMode:'rgbfv',onChange:audioGrapher.updateSurfaceMaterial.bind(audioGrapher)})
+                 .addColor(audioGrapher,'materialColorSpecular',{label:'C Spe',colorMode:'rgbfv',onChange:audioGrapher.updateSurfaceMaterial.bind(audioGrapher)})
+                 .addNumberInput(audioGrapher,'materialShininess',    {label:'Shi', onChange:audioGrapher.updateSurfaceMaterial.bind(audioGrapher)})
+
 
             group = panel.addGroup({label:'Surface 0'});
+            group.addSubGroup().addSelect(audioGrapher,'surfacePresets',{label:'Preset'});
             group.addSubGroup({label:'f(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface0FuncXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface0FuncYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface0FuncZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface0FuncXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addRange(audioGrapher,'surface0URange',{label:'u',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addRange(audioGrapher,'surface0VRange',{label:'v',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
             group.addSubGroup({label:'fs(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface0FuncScaleXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface0FuncScaleYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface0FuncScaleZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface0FuncScaleXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncScaleYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncScaleZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
             group.addSubGroup({label:'ft(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface0FuncTransXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface0FuncTransYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface0FuncTransZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface0FuncTransXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncTransYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface0FuncTransZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
 
-            group = panel.addGroup({label:'Surface 1'});
+            group = panel.addGroup({label:'Surface 1',enable:false});
+            group.addSubGroup().addSelect(audioGrapher,'surfacePresets',{label:'Preset'})
             group.addSubGroup({label:'f(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface1FuncXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface1FuncYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface1FuncZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface1FuncXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addRange(audioGrapher,'surface1URange',{label:'u',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addRange(audioGrapher,'surface1VRange',{label:'v',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
             group.addSubGroup({label:'fs(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface1FuncScaleXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface1FuncScaleYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface1FuncScaleZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface1FuncScaleXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncScaleYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncScaleZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
             group.addSubGroup({label:'ft(u,v,t,m,bu,bv)'})
-                 .addStringInput(audioGrapher,'surface1FuncTransXString',{label:'x'})
-                 .addStringInput(audioGrapher,'surface1FuncTransYString',{label:'y'})
-                 .addStringInput(audioGrapher,'surface1FuncTransZString',{label:'z'});
+                 .addStringInput(audioGrapher,'surface1FuncTransXString',{label:'x',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncTransYString',{label:'y',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)})
+                 .addStringInput(audioGrapher,'surface1FuncTransZString',{label:'z',onChange:audioGrapher.updateSurfaceFunc.bind(audioGrapher)});
 
 
 

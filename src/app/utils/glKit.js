@@ -1331,7 +1331,7 @@ GLKit.ProgFragShader="precision mediump float;" +
 "varying vec4 vVertexColor;" + 
 "varying vec3 vVertexNormal;" + 
 
-"const int   MAX_LIGHTS = 8;" + 
+"const int   MAX_LIGHTS = 3;" +
 
 "uniform float uUseLighting;" + 
 "uniform float uUseMaterial;" + 
@@ -1722,7 +1722,7 @@ GLKit.GL = function(gl)
     this.LIGHT_5    = 5;
     this.LIGHT_6    = 6;
     this.LIGHT_7    = 7;
-    this.MAX_LIGHTS = 8;
+    this.MAX_LIGHTS = 3;
 
     this.MODEL_PHONG       = 0;
     this.MODEL_ANTISOPTRIC = 1;

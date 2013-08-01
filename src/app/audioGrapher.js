@@ -12,7 +12,7 @@ function AudioGrapher(element)
         light0.setAmbient3f(0,0,0);
         light0.setDiffuse3f(0.8,0.8,0.8);
         light0.setSpecular3f(1,1,1);
-        light0.setPosition3f(0,0.1,0);
+        light0.setPosition3f(0,0.25,0);
 
     var light1 = this._light1 = new GLKit.Light(this.gl.LIGHT_1);
         light1.setAmbient3f(0,0,0);
@@ -46,6 +46,9 @@ function AudioGrapher(element)
     this.timeScaleRange  = [0.0,2.0];
 
     this.lightEnabled                = true;
+
+    this.lightGlobalPresets = ['Preset 1','Preset 2'];
+
     this.lightSetPosGlobal           = true;
     this.lightPosGlobalX             = 0;
     this.lightPosGlobalY             = 0;
@@ -62,6 +65,8 @@ function AudioGrapher(element)
     this.lightAttLinearGlobal        = 0.0;
     this.lightSetAttQuadraticGlobal  = true;
     this.lightAttQuadraticGlobal     = 0.0;
+
+    this.lightPresets = ['Preset 1','Preset 2'];
 
     this.light0Enabled      = true;
     this.light0Show         = false;
@@ -82,33 +87,34 @@ function AudioGrapher(element)
     this.light2Specular     = [light2.specular[0],light2.specular[1],light2.specular[2]];
 
 
-    this.lightFuncNull = function(t,m){return 0;};
-
-
-    this.light0FuncXString = '0';
-    this.light0FuncYString = '0';
-    this.light0FuncZString = '0';
+    this.light0FuncXString = light0.position[0] + '';
+    this.light0FuncYString = light0.position[1] + '';
+    this.light0FuncZString = light0.position[2] + '';
     this.light0FuncAttConString = light0.constantAttentuation + '';
     this.light0FuncAttLinString = light0.linearAttentuation   + '';
     this.light0FuncAttQuaString = light0.quadricAttentuation  + '';
+    this._light0i = 0;
 
-    this.light1FuncXString = '0';
-    this.light1FuncYString = '0';
-    this.light1FuncZString = '0';
+    this.light1FuncXString = light1.position[0] + '';
+    this.light1FuncYString = light1.position[1] + '';
+    this.light1FuncZString = light1.position[2] + '';
     this.light1FuncAttConString = light1.constantAttentuation + '';
     this.light1FuncAttLinString = light1.linearAttentuation   + '';
     this.light1FuncAttQuaString = light1.quadricAttentuation  + '';
+    this._light1i = 1/3;
 
-    this.light2FuncXString = '0';
-    this.light2FuncYString = '0';
-    this.light2FuncZString = '0';
+    this.light2FuncXString = light2.position[0] + '';
+    this.light2FuncYString = light2.position[1] + '';
+    this.light2FuncZString = light2.position[2] + '';
     this.light2FuncAttConString = light2.constantAttentuation + '';
     this.light2FuncAttLinString = light2.linearAttentuation   + '';
     this.light2FuncAttQuaString = light2.quadricAttentuation  + '';
+    this._light2i = 2/3;
 
     this._light0FuncX = this.light0FuncY = this._light0FuncZ =
     this._light1FuncX = this.light1FuncY = this._light1FuncZ =
     this._light2FuncX = this.light2FuncY = this._light2FuncZ = null;
+
     this.updateLight0FuncPos();
     this.updateLight1FuncPos();
     this.updateLight2FuncPos();
@@ -116,6 +122,7 @@ function AudioGrapher(element)
     this._light0FuncAttCon = this._light0FuncAttLin = this._light0FuncAttQua =
     this._light1FuncAttCon = this._light1FuncAttLin = this._light1FuncAttQua =
     this._light2FuncAttCon = this._light2FuncAttLin = this._light2FuncAttQua = null;
+
     this.updateLight0FuncAtt();
     this.updateLight1FuncAtt();
     this.updateLight2FuncAtt();
@@ -135,6 +142,12 @@ function AudioGrapher(element)
     this.cameraLocZ = camera.position[2];
 
 
+    this.materialColorAmbient  = [material.ambient[0],material.ambient[1],material.ambient[2]];
+    this.materialColorDiffuse  = [material.diffuse[0],material.diffuse[1],material.diffuse[2]];
+    this.materialColorSpecular = [material.specular[0],material.specular[1],material.specular[2]];
+    this.materialShininess     = material.shininess;
+
+
     /*---------------------------------------------------------------------------------*/
 
     this.surfaceRenderWireframe = false;
@@ -144,11 +157,17 @@ function AudioGrapher(element)
     this.surfaceIntrpl       = 0.0;
     this.surfaceIntrplMinMax = [0.0,1.0];
 
-    this._surface0FuncX = this._surface0FuncY = this._surface0FuncZ =
+    this.surfacePresets = ['Preset 1','Preset 2'];
+
+    this._surfacePresetsParams = {};
+
+    this._surfaceFuncX = this._surfaceFuncY = this._surfaceFuncZ =
     this._surface1FuncX = this._surface1FuncY = this._surface1FuncZ = null;
 
-    this.surface0FuncXString = this.surface0FuncYString = this.surface0FuncZString =
-    this.surface1FuncXString = this.surface1FuncYString = this.surface1FuncZString = '0';
+    this.surface0FuncYString = this.surface1FuncYString = '0';
+
+    this.surface0FuncXString = this.surface1FuncXString = 'u';
+    this.surface0FuncZString = this.surface1FuncZString = 'v';
 
     this.surface0FuncScaleXString = this.surface0FuncScaleYString = this.surface0FuncScaleZString =
     this.surface1FuncScaleXString = this.surface1FuncScaleYString = this.surface1FuncScaleZString = '1';
@@ -156,40 +175,35 @@ function AudioGrapher(element)
     this.surface0FuncTransXString = this.surface0FuncTransYString = this.surface0FuncTransZString =
     this.surface1FuncTransXString = this.surface1FuncTransYString = this.surface1FuncTransZString = '0';
 
-    this.surface0URange = [0,0];
-    this.surface0VRange = [0,0];
-    this.surface1URange = [0,0];
-    this.surface1VRange = [0,0];
+    this.surface0URange = [-1,1];
+    this.surface0VRange = [-1,1];
+    this.surface1URange = [-1,1];
+    this.surface1VRange = [-1,1];
+
+    this._surfaceURange = null;
+    this._surfaceVRange = null;
+
 
 
     var surfaceSize = this.surfaceSize = 100;
     var surface     = this._surface    = new Surface(surfaceSize);
-        surface.applyFunctions();
-        surface.updateVertexNormals();
+
+    this.updateSurfaceFunc();
+
+    surface.applyFunctions();
+    surface.updateVertexNormals();
 
 
     this._magnitudeAvg    = 1;
     this._magnitudeBuffer0 = new Array(surfaceSize);
     this._magnitudeBuffer1 = new Array(surfaceSize);
 
-    i = -1;while(++i<surfaceSize){this._magnitudeBuffer0[i]=this._magnitudeBuffer1[i]=0.0;}
+    var i = -1;while(++i<surfaceSize){this._magnitudeBuffer0[i]=this._magnitudeBuffer1[i]=0.0;}
 
 
 }
 
-AudioGrapher.prototype.updateSurface0Func = function()
-{
-    try{this._surface0FuncX = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncXString + ')' + '*' + '(' + this.surface0FuncScaleXString + ')' + '(' + this.surface0FuncTransXString + ')');}catch(e){}
-    try{this._surface0FuncY = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncYString + ')' + '*' + '(' + this.surface0FuncScaleYString + ')' + '(' + this.surface0FuncTransYString + ')');}catch(e){}
-    try{this._surface0FuncZ = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncZString + ')' + '*' + '(' + this.surface0FuncScaleZString + ')' + '(' + this.surface0FuncTransZString + ')');}catch(e){}
-};
 
-AudioGrapher.prototype.updateSurface1Func = function()
-{
-    try{this._surface1FuncX = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncXString + ')' + '*' + '(' + this.surface1FuncScaleXString + ')' + '(' + this.surface1FuncTransXString + ')');}catch(e){}
-    try{this._surface1FuncY = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncYString + ')' + '*' + '(' + this.surface1FuncScaleYString + ')' + '(' + this.surface1FuncTransYString + ')');}catch(e){}
-    try{this._surface1FuncZ = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncZString + ')' + '*' + '(' + this.surface1FuncScaleZString + ')' + '(' + this.surface1FuncTransZString + ')');}catch(e){}
-};
 
 AudioGrapher.prototype = Object.create(GLKit.Application.prototype);
 
@@ -327,14 +341,19 @@ AudioGrapher.prototype.update = function()
 
     if(this.light0Enabled)
     {
-        light0.position[0] = this._light0FuncX(time,magAvg);
-        light0.position[1] = this._light0FuncY(time,magAvg);
-        light0.position[2] = this._light0FuncZ(time,magAvg);
+        var light0i = this._light0i;
 
-        light0.constantAttentuation = this._light0FuncAttCon(time,magAvg);
-        light0.linearAttentuation   = this._light0FuncAttLin(time,magAvg);
-        light0.quadricAttentuation  = this._light0FuncAttQua(time,magAvg);
+        try
+        {
+            light0.position[0] = this._light0FuncX(time,magAvg,light0i);
+            light0.position[1] = this._light0FuncY(time,magAvg,light0i);
+            light0.position[2] = this._light0FuncZ(time,magAvg,light0i);
 
+            light0.constantAttentuation = this._light0FuncAttCon(time,magAvg,light0i);
+            light0.linearAttentuation   = this._light0FuncAttLin(time,magAvg,light0i);
+            light0.quadricAttentuation  = this._light0FuncAttQua(time,magAvg,light0i);
+        }
+        catch(e){}
 
         gl.light(light0);
     }
@@ -345,13 +364,19 @@ AudioGrapher.prototype.update = function()
 
     if(this.light1Enabled)
     {
-        light1.position[0] = this._light1FuncX(time,magAvg);
-        light1.position[1] = this._light1FuncY(time,magAvg);
-        light1.position[2] = this._light1FuncZ(time,magAvg);
+        var light1i = this._light1i;
 
-        light1.constantAttentuation = this._light1FuncAttCon(time,magAvg);
-        light1.linearAttentuation   = this._light1FuncAttLin(time,magAvg);
-        light1.quadricAttentuation  = this._light1FuncAttQua(time,magAvg);
+        try
+        {
+            light1.position[0] = this._light1FuncX(time,magAvg,light1i);
+            light1.position[1] = this._light1FuncY(time,magAvg,light1i);
+            light1.position[2] = this._light1FuncZ(time,magAvg,light1i);
+
+            light1.constantAttentuation = this._light1FuncAttCon(time,light1i);
+            light1.linearAttentuation   = this._light1FuncAttLin(time,light1i);
+            light1.quadricAttentuation  = this._light1FuncAttQua(time,light1i);
+        }
+        catch(e){}
 
         gl.light(light1);
     }
@@ -362,13 +387,19 @@ AudioGrapher.prototype.update = function()
 
     if(this.light2Enabled)
     {
-        light2.position[0] = this._light2FuncX(time,magAvg);
-        light2.position[1] = this._light2FuncY(time,magAvg);
-        light2.position[2] = this._light2FuncZ(time,magAvg);
+        var light2i = this._light2i;
 
-        light2.constantAttentuation = this._light2FuncAttCon(time,magAvg);
-        light2.linearAttentuation   = this._light2FuncAttLin(time,magAvg);
-        light2.quadricAttentuation  = this._light2FuncAttQua(time,magAvg);
+        try
+        {
+            light2.position[0] = this._light2FuncX(time,magAvg,light2i);
+            light2.position[1] = this._light2FuncY(time,magAvg,light2i);
+            light2.position[2] = this._light2FuncZ(time,magAvg,light2i);
+
+            light2.constantAttentuation = this._light2FuncAttCon(time,magAvg,light2i);
+            light2.linearAttentuation   = this._light2FuncAttLin(time,magAvg,light2i);
+            light2.quadricAttentuation  = this._light2FuncAttQua(time,magAvg,light2i);
+        }
+        catch(e){}
 
         gl.light(light2);
     }
@@ -380,6 +411,14 @@ AudioGrapher.prototype.update = function()
     /*---------------------------------------------------------------------------------*/
 
     gl.useMaterial(true);
+
+    try
+    {
+        surface.applyFunctionsWithArgs(time,magAvg,this._magnitudeBuffer0,this._magnitudeBuffer1);
+    }catch(e){}
+
+    surface.updateVertexNormals();
+
 
     if(this.surfaceRenderGeometry)
     {
@@ -512,45 +551,143 @@ AudioGrapher.prototype.updateLight2Color = function()
 
 AudioGrapher.prototype.updateLight0FuncPos = function()
 {
-    try{this._light0FuncX = new Function('t','m','return ' + this.light0FuncXString );}catch(e){this._light0FuncX = this.lightFuncNull;}
-    try{this._light0FuncY = new Function('t','m','return ' + this.light0FuncYString );}catch(e){this._light0FuncY = this.lightFuncNull;}
-    try{this._light0FuncZ = new Function('t','m','return ' + this.light0FuncZString );}catch(e){this._light0FuncZ = this.lightFuncNull;}
+    try
+    {
+        this._light0FuncX = new Function('t','m','i','return ' + this.light0FuncXString);
+        this._light0FuncY = new Function('t','m','i','return ' + this.light0FuncYString);
+        this._light0FuncZ = new Function('t','m','i','return ' + this.light0FuncZString);
+
+    }catch(e){}
 };
 
 AudioGrapher.prototype.updateLight0FuncAtt = function()
 {
-    try{this._light0FuncAttCon = new Function('t','m','return ' + this.light0FuncAttConString );}catch(e){this._light0FuncAttCon = this.lightFuncNull;}
-    try{this._light0FuncAttLin = new Function('t','m','return ' + this.light0FuncAttLinString );}catch(e){this._light0FuncAttLin = this.lightFuncNull;}
-    try{this._light0FuncAttQua = new Function('t','m','return ' + this.light0FuncAttQuaString );}catch(e){this._light0FuncAttQua = this.lightFuncNull;}
+    try
+    {
+        this._light0FuncAttCon = new Function('t','m','i','return ' + this.light0FuncAttConString );
+        this._light0FuncAttLin = new Function('t','m','i','return ' + this.light0FuncAttLinString );
+        this._light0FuncAttQua = new Function('t','m','i','return ' + this.light0FuncAttQuaString );
+
+    }catch(e){}
 };
 
 AudioGrapher.prototype.updateLight1FuncPos = function()
 {
-    try{this._light1FuncX = new Function('t','m','return ' + this.light1FuncXString );}catch(e){this._light1FuncX = this.lightFuncNull;}
-    try{this._light1FuncY = new Function('t','m','return ' + this.light1FuncYString );}catch(e){this._light1FuncY = this.lightFuncNull;}
-    try{this._light1FuncZ = new Function('t','m','return ' + this.light1FuncZString );}catch(e){this._light1FuncZ = this.lightFuncNull;}
+    try
+    {
+        this._light1FuncX = new Function('t','m','i','return ' + this.light1FuncXString );
+        this._light1FuncY = new Function('t','m','i','return ' + this.light1FuncYString );
+        this._light1FuncZ = new Function('t','m','i','return ' + this.light1FuncZString );
+
+    }catch(e){}
 };
 
 AudioGrapher.prototype.updateLight1FuncAtt = function()
 {
-    try{this._light1FuncAttCon = new Function('t','m','return ' + this.light1FuncAttConString );}catch(e){this._light1FuncAttCon = this.lightFuncNull;}
-    try{this._light1FuncAttLin = new Function('t','m','return ' + this.light1FuncAttLinString );}catch(e){this._light1FuncAttLin = this.lightFuncNull;}
-    try{this._light1FuncAttQua = new Function('t','m','return ' + this.light1FuncAttQuaString );}catch(e){this._light1FuncAttQua = this.lightFuncNull;}
+    try
+    {
+        this._light1FuncAttCon = new Function('t','m','i','return ' + this.light1FuncAttConString );
+        this._light1FuncAttLin = new Function('t','m','i','return ' + this.light1FuncAttLinString );
+        this._light1FuncAttQua = new Function('t','m','i','return ' + this.light1FuncAttQuaString );
+    }
+    catch(e){}
 };
 
 AudioGrapher.prototype.updateLight2FuncPos = function()
 {
-    try{this._light2FuncX = new Function('t','m','return ' + this.light2FuncXString );}catch(e){this._light2FuncX = this.lightFuncNull;}
-    try{this._light2FuncY = new Function('t','m','return ' + this.light2FuncYString );}catch(e){this._light2FuncY = this.lightFuncNull;}
-    try{this._light2FuncZ = new Function('t','m','return ' + this.light2FuncZString );}catch(e){this._light2FuncZ = this.lightFuncNull;}
+    try
+    {
+        this._light2FuncX = new Function('t','m','i','return ' + this.light2FuncXString );
+        this._light2FuncY = new Function('t','m','i','return ' + this.light2FuncYString );
+        this._light2FuncZ = new Function('t','m','i','return ' + this.light2FuncZString );
+
+    }catch(e){}
 };
 
 AudioGrapher.prototype.updateLight2FuncAtt = function()
 {
-    try{this._light2FuncAttCon = new Function('t','m','return ' + this.light2FuncAttConString );}catch(e){this._light2FuncAttCon = this.lightFuncNull;}
-    try{this._light2FuncAttLin = new Function('t','m','return ' + this.light2FuncAttLinString );}catch(e){this._light2FuncAttLin = this.lightFuncNull;}
-    try{this._light2FuncAttQua = new Function('t','m','return ' + this.light2FuncAttQuaString );}catch(e){this._light2FuncAttQua = this.lightFuncNull;}
+    try
+    {
+        this._light2FuncAttCon = new Function('t','m','i','return ' + this.light2FuncAttConString );
+        this._light2FuncAttLin = new Function('t','m','i','return ' + this.light2FuncAttLinString );
+        this._light2FuncAttQua = new Function('t','m','i','return ' + this.light2FuncAttQuaString );
+
+    }catch(e){}
 };
+
+AudioGrapher.prototype.updateSurfaceFunc = function()
+{
+    var intrpl = this.surfaceIntrpl;
+
+    if(intrpl == 0.0)
+    {
+        try
+        {
+            this._surfaceFuncX = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncXString + ')' + '*' + '(' + this.surface0FuncScaleXString + ')' + '+' + '(' + this.surface0FuncTransXString + ')');
+            this._surfaceFuncY = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncYString + ')' + '*' + '(' + this.surface0FuncScaleYString + ')' + '+' + '(' + this.surface0FuncTransYString + ')');
+            this._surfaceFuncZ = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface0FuncZString + ')' + '*' + '(' + this.surface0FuncScaleZString + ')' + '+' + '(' + this.surface0FuncTransZString + ')');
+
+        }catch(e){}
+
+
+        this._surfaceURange = this.surface0URange;
+        this._surfaceVRange = this.surface0VRange;
+
+    }
+    else if(intrpl == 1.0)
+    {
+        try
+        {
+            this._surfaceFuncX = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncXString + ')' + '*' + '(' + this.surface1FuncScaleXString + ')' + '+' + '(' + this.surface1FuncTransXString + ')');
+            this._surfaceFuncY = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncYString + ')' + '*' + '(' + this.surface1FuncScaleYString + ')' + '+' + '(' + this.surface1FuncTransYString + ')');
+            this._surfaceFuncZ = new Function('u','v','t','m','bu','bv','return ' + '(' + this.surface1FuncZString + ')' + '*' + '(' + this.surface1FuncScaleZString + ')' + '+' + '(' + this.surface1FuncTransZString + ')');
+
+        }catch(e){}
+
+        this._surfaceURange = this.surface1URange;
+        this._surfaceVRange = this.surface1VRange;
+    }
+    else
+    {
+        try
+        {
+            var surface0FuncXString = '(' + this.surface0FuncXString + ')' + '*' + '(' + this.surface0FuncScaleXString + ')' + '+' + '(' + this.surface0FuncTransXString + ')',
+                surface0FuncYString = '(' + this.surface0FuncYString + ')' + '*' + '(' + this.surface0FuncScaleYString + ')' + '+' + '(' + this.surface0FuncTransYString + ')',
+                surface0FuncZString = '(' + this.surface0FuncZString + ')' + '*' + '(' + this.surface0FuncScaleZString + ')' + '+' + '(' + this.surface0FuncTransZString + ')';
+
+            var surface1FuncXString = '(' + this.surface1FuncXString + ')' + '*' + '(' + this.surface1FuncScaleXString + ')' + '+' + '(' + this.surface1FuncTransXString + ')',
+                surface1FuncYString = '(' + this.surface1FuncYString + ')' + '*' + '(' + this.surface1FuncScaleYString + ')' + '+' + '(' + this.surface1FuncTransYString + ')',
+                surface1FuncZString = '(' + this.surface1FuncZString + ')' + '*' + '(' + this.surface1FuncScaleZString + ')' + '+' + '(' + this.surface1FuncTransZString + ')';
+
+            this._surfaceFuncX =  new Function('u','v','t','m','bu','bv','return ' + '(' + surface0FuncXString + ')' + '*' + '(1.0 -' + intrpl + ')' + '+' + '(' + surface1FuncXString + ')' + '*' + intrpl);
+            this._surfaceFuncX =  new Function('u','v','t','m','bu','bv','return ' + '(' + surface0FuncYString + ')' + '*' + '(1.0 -' + intrpl + ')' + '+' + '(' + surface1FuncYString + ')' + '*' + intrpl);
+            this._surfaceFuncX =  new Function('u','v','t','m','bu','bv','return ' + '(' + surface0FuncZString + ')' + '*' + '(1.0 -' + intrpl + ')' + '+' + '(' + surface1FuncZString + ')' + '*' + intrpl);
+
+        }catch(e){}
+
+        this._surfaceURange = [(this.surface0URange[0] + this.surface1URange[0]) * 0.5,(this.surface0URange[1] + this.surface1URange[1]) * 0.5];
+        this._surfaceVRange = [(this.surface0VRange[0] + this.surface1VRange[0]) * 0.5,(this.surface0VRange[1] + this.surface1VRange[1]) * 0.5];
+
+    }
+
+    this._surface.setFunctions(this._surfaceFuncX,this._surfaceFuncY,this._surfaceFuncZ,this._surfaceURange,this._surfaceVRange);
+};
+
+AudioGrapher.prototype.updateSurfaceMaterial = function()
+{
+    var material = this._material0;
+
+    var ambient   = this.materialColorAmbient,
+        diffuse   = this.materialColorDiffuse,
+        specular  = this.materialColorSpecular,
+        shininess = this.materialShininess;
+
+    material.setAmbient3f(ambient[0],ambient[1],ambient[2]);
+    material.setDiffuse3f(diffuse[0],diffuse[1],diffuse[2]);
+    material.setSpecular3f(specular[0],specular[1],specular[2]);
+    material.shininess = shininess;
+
+}
 
 AudioGrapher.prototype.onWindowResize = function(){this.setSize(window.innerWidth,window.innerHeight);};
 
