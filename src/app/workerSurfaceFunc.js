@@ -2,27 +2,34 @@ self.addEventListener('message',function(e)
 {
     var data    = e.data;
 
-    var indices     = data[0],
-        vertices    = data[1],
-        normals     = data[2];
+    var vertices    = data[0],
+        normals     = data[1];
 
-    var funcXString = data[3],
-        funcYString = data[4],
-        funcZString = data[5];
+    var funcXString = data[2],
+        funcYString = data[3],
+        funcZString = data[4];
 
-    var funcX       = new Function('u','v','t','m','bu','bv','return ' + funcXString),
-        funcY       = new Function('u','v','t','m','bu','bv','return ' + funcYString),
-        funcZ       = new Function('u','v','t','m','bu','bv','return ' + funcZString);
+    var funcX,funcY,funcZ;
 
-    var ur = data[6],
-        vr = data[7];
+    try
+    {
+        funcX = new Function('u','v','t','m','bu','bv','return ' + funcXString);
+        funcY = new Function('u','v','t','m','bu','bv','return ' + funcYString);
+        funcZ = new Function('u','v','t','m','bu','bv','return ' + funcZString);
+
+    }catch(e){}
+
+
+
+    var ur = data[5],
+        vr = data[6];
 
     var urLower = ur[0],
         urUpper = ur[1],
         vrLower = vr[0],
         vrUpper = vr[1];
 
-    var size = data[8];
+    var size = data[7];
 
     var i, j, u, v;
 
@@ -34,9 +41,9 @@ self.addEventListener('message',function(e)
 
     var bu,bv;
 
-    var buffer = data[9],
-        m      = data[10],
-        t      = data[11];
+    var buffer = data[8],
+        m      = data[9],
+        t      = data[10];
 
     try
     {
@@ -197,6 +204,12 @@ function normalize(value,start,end)
     return (value - start) / (end - start);
 }
 
+function rect(value)
+{
+    var a = Math.abs(value);
+    return (a > 0.5) ? 0 : (a == 0.5) ? 0.5 : (a < 0.5) ? 1 : -1;
+}
+
 function map(value,inStart,inEnd,outStart,outEnd)
 {
     return outStart + (outEnd - outStart) * normalize(value,inStart,inEnd);
@@ -214,20 +227,12 @@ function cos(value)
 
 function saw(value)
 {
-
     return 2 * (value  - Math.floor(0.5 + value ));
 }
 
 function tri(value)
 {
-    return 1-4*abs(0.5-frac(0.5*value+0.25));
-}
-
-//FIX
-function rect(value)
-{
-    var a = abs(value);
-    return (a > 0.5) ? 0 : (a == 0.5) ? 0.5 : (a < 0.5) ? 1 : -1;
+    return 1-4*Math.abs(0.5-frac(0.5*value+0.25));
 }
 
 
@@ -238,7 +243,7 @@ function frac(value)
 
 function sgn(value)
 {
-    return value / abs(value);
+    return value / Math.abs(value);
 }
 
 
