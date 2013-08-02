@@ -6,6 +6,5 @@
     "description" :              "",
     "app":                       {"background":{"scripts":["main.js"]}},
     "permissions":               [{"fileSystem": ["write"]},"tts"],
-    "web_accessible_resources" : ["app/resource/sample.mp3"],
     "sandbox":                   {"pages":["app/sandbox.html"]}
 }

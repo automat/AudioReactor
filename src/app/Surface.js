@@ -1,12 +1,16 @@
 function Surface(size)
 {
     GLKit.ParametricSurface.apply(this,arguments);
+
+    this.funcXString = '';
+    this.funcYString = '';
+    this.funcZString = '';
 }
 
 Surface.prototype = Object.create(GLKit.ParametricSurface.prototype);
 
 
-
+/*
 GLKit.ParametricSurface.prototype.applyFunctions = function()
 {
     var bu = new Array(this.size),
@@ -18,7 +22,7 @@ GLKit.ParametricSurface.prototype.applyFunctions = function()
     this.applyFunctionsWithArgs(0,0,bv,bu);
 };
 
-GLKit.ParametricSurface.prototype.applyFunctionsWithArgs = function(t,m,bu,bv)
+GLKit.ParametricSurface.prototype.applyFunctionsWithArgs = function(t,m,b)
 {
     var size  = this.size;
 
@@ -41,6 +45,8 @@ GLKit.ParametricSurface.prototype.applyFunctionsWithArgs = function(t,m,bu,bv)
         temp1 = vrUpper - vrLower,
         temp2 = size - 1;
 
+    var bu,bv;
+
     i = -1;
     while(++i < size)
     {
@@ -53,9 +59,13 @@ GLKit.ParametricSurface.prototype.applyFunctionsWithArgs = function(t,m,bu,bv)
             u = (urLower + temp0 * (j / temp2));
             v = (vrLower + temp1 * (i / temp2));
 
+            bu = b[j];
+            bv = b[i];
+
             vertices[indexVertices    ] = funcX(u,v,t,m,bu,bv);
             vertices[indexVertices + 1] = funcY(u,v,t,m,bu,bv);
             vertices[indexVertices + 2] = funcZ(u,v,t,m,bu,bv);
         }
     }
 };
+    */
