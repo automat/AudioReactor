@@ -5,6 +5,6 @@
     "minimum_chrome_version":    "23",
     "description" :              "",
     "app":                       {"background":{"scripts":["main.js"]}},
-    "permissions":               [{"fileSystem": ["write"]},"tts"],
+    "permissions":               [{"fileSystem": ["write"]},"tts","audioCapture","videoCapture"],
     "sandbox":                   {"pages":["app/sandbox.html"]}
 }

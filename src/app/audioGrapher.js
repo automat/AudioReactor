@@ -154,7 +154,6 @@ function AudioGrapher(element)
     var camera = this.camera;
 
     this.cameraZoom = 1.0;
-    this.cameraZoomMinMax     = [-20,20];
     this.cameraAutoRotate     = true;
     this.cameraTimeDeltaScale = 0.25;
     this.cameraParametric     = false;
@@ -181,7 +180,9 @@ function AudioGrapher(element)
     this.surfaceIntrpl       = 0.0;
     this.surfaceIntrplMinMax = [0.0,1.0];
 
-    this.surfacePresets = ['Plane','Torus','Sphere', 'Cylinder','Disc', 'Unnamed'];
+    this.surfacePresets = ['Plane','Torus','Sphere', 'Cylinder','Disc', 'Cube', 'Unnamed'];
+
+
 
     this._surfacePresets =
     [
@@ -211,13 +212,20 @@ function AudioGrapher(element)
          uRange:[0,Math.PI * 0.5],vRange:[0,Math.PI * 2]},
 
 
+
+        {funcXString:'(0.5*sin(u)*cos(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+         funcYString:'(0.5*sin(u)*sin(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+         funcZString:'(0.5*cos(u))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+            funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
+            funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
+            uRange:[0,Math.PI * 2],vRange:[0,Math.PI]},
+
+
         {funcXString:'u',funcYString:'1',funcZString:'v',
             funcXScaleString:'10 + 3 * m',funcYScaleString:'1+sin(bv*bu*20)*cos(v)',funcZScaleString:'10 + 3 * m',
             funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
             uRange:[-1,1],vRange:[-1,1]}
     ];
-
-    this._surfaceFuncX = this._surfaceFuncY = this._surfaceFuncZ = null;
 
     this.surface0FuncYString = this.surface1FuncYString = '0';
 
@@ -241,6 +249,20 @@ function AudioGrapher(element)
     this._surfaceFuncXString = '0';
     this._surfaceFuncYString = '0';
     this._surfaceFuncZString = '0';
+
+    this.surfaceObjTransXString = '0';
+    this.surfaceObjTransYString = '0';
+    this.surfaceObjTransZString = '0';
+
+    this.surfaceObjRotXString = '0';
+    this.surfaceObjRotYString = '0';
+    this.surfaceObjRotZString = '0';
+
+    this._surfaceObjTransXFunc = this._surfaceObjTransYFunc = this._surfaceObjTransZFunc = null;
+    this._surfaceObjRotXFunc = this._surfaceObjRotYFunc = this._surfaceObjRotZFunc = null;
+
+    this.updateSurfaceObjFunc();
+
 
 
 
@@ -281,6 +303,19 @@ function AudioGrapher(element)
             surface.vertices = e.data[0];
             surface.normals  = e.data[1];
         });
+
+
+    /*
+    var webWorkerSurfaceNormalsBlob = new Blob(["self.addEventListener('message',function(e) { var data = e.data; var indices = data[0], vertices = data[1], normals = data[2]; var i; var a, b, c; var e2x, e2y, e2z, e1x, e1y, e1z; var nx, ny, nz, vbx, vby, vbz, a0, a1, a2, b0, b1, b2, c0, c1, c2; i = 0; while( i < normals.length ) { normals[i] = normals[i+1] = normals[i+2] = 0.0; i+=3; } i = 0; while( i < indices.length ) { a = indices[i ]*3; b = indices[i+1]*3; c = indices[i+2]*3; a0 = a; a1 = a+1; a2 = a+2; b0 = b; b1 = b+1; b2 = b+2; c0 = c; c1 = c+1; c2 = c+2; vbx = vertices[b0]; vby = vertices[b1]; vbz = vertices[b2]; e1x = vertices[a0]-vbx; e1y = vertices[a1]-vby; e1z = vertices[a2]-vbz; e2x = vertices[c0]-vbx; e2y = vertices[c1]-vby; e2z = vertices[c2]-vbz; nx = e1y * e2z - e1z * e2y; ny = e1z * e2x - e1x * e2z; nz = e1x * e2y - e1y * e2x; normals[a0] += nx; normals[a1] += ny; normals[a2] += nz; normals[b0] += nx; normals[b1] += ny; normals[b2] += nz; normals[c0] += nx; normals[c1] += ny; normals[c2] += nz; i+=3; } var x, y, z, l, il; i = 0; while(i < normals.length) { x = normals[i ]; y = normals[i+1]; z = normals[i+2]; l = Math.sqrt(x*x+y*y+z*z); il = 1 / (l != 0 ? l : 1); normals[i ] *= il; normals[i+1] *= il; normals[i+2] *= il; i+=3; } postMessage([normals]); },false);"]),
+        webWorkerSurfaceNormals     = this._webWorkerSurfaceNormals = new Worker(window.URL.createObjectURL(webWorkerSurfaceNormalsBlob));
+
+        webWorkerSurfaceNormals.postMessage([surface.indices,surface.vertices,surface.normals]);
+        webWorkerSurfaceNormals.addEventListener('message',function(e)
+        {
+            surface.normals = e.data[0];
+
+        });
+        */
 }
 
 
@@ -598,6 +633,7 @@ AudioGrapher.prototype.update = function()
 
     try
     {
+
         this._webWorkerSurfaceFunc.postMessage([surface.vertices,
                                                 surface.normals,
 
@@ -611,17 +647,48 @@ AudioGrapher.prototype.update = function()
                                                 surface.size,
 
                                                 this._magnitudeBuffer0,
-                                                this._magnitudeAvg,
+                                                magAvg,
                                                 time]);
 
-        surface.updateVertexNormals();
+
+        //surface.updateVertexNormals();
 
     }catch(e){}
+
+
+    gl.pushMatrix();
+
+    try
+    {
+        gl.translate3f(this._surfaceObjTransFuncX(time,magAvg),
+                       this._surfaceObjTransFuncY(time,magAvg),
+                       this._surfaceObjTransFuncZ(time,magAvg));
+
+    } catch(e)
+    {
+        gl.translate3f(0,0,0);
+    }
+
+
+    try
+    {
+        gl.rotate3f(this._surfaceObjRotFuncX(time,magAvg),
+                    this._surfaceObjRotFuncY(time,magAvg),
+                    this._surfaceObjRotFuncZ(time,magAvg));
+
+    } catch (e)
+    {
+        gl.rotate3f(0,0,0);
+    }
 
 
 
     if(this.surfaceRenderGeometry)
     {
+        //this._webWorkerSurfaceNormals.postMessage([surface.indices,surface.vertices,surface.normals]);
+
+        surface.updateVertexNormals();
+
         gl.material(material0);
         gl.drawMode(gl.TRIANGLES);
         gl.drawGeometry(surface);
@@ -648,6 +715,8 @@ AudioGrapher.prototype.update = function()
     {
 
     }
+
+    gl.popMatrix();
 
 
 
@@ -838,6 +907,24 @@ AudioGrapher.prototype.updateSurfaceFunc = function()
         surface.vr = this._surfaceVRange;
     //this._surface.setFunctions(this._surfaceFuncX,this._surfaceFuncY,this._surfaceFuncZ,this._surfaceURange,this._surfaceVRange);
 };
+
+
+
+AudioGrapher.prototype.updateSurfaceObjFunc = function()
+{
+    try
+    {
+        this._surfaceObjRotFuncX = new Function('t','m','return ' + this.surfaceObjRotXString);
+        this._surfaceObjRotFuncY = new Function('t','m','return ' + this.surfaceObjRotYString);
+        this._surfaceObjRotFuncZ = new Function('t','m','return ' + this.surfaceObjRotZString);
+
+        this._surfaceObjTransFuncX = new Function('t','m','return ' + this.surfaceObjTransXString);
+        this._surfaceObjTransFuncY = new Function('t','m','return ' + this.surfaceObjTransYString);
+        this._surfaceObjTransFuncZ = new Function('t','m','return ' + this.surfaceObjTransZString);
+
+    }
+    catch (e){}
+}
 
 AudioGrapher.prototype.updateCameraFunc = function()
 {

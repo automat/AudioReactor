@@ -7,7 +7,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
         bounds: {
             width:  width,
             height: height,
-            left: 1280  - width * 0.5,
+            left: 2600,
             top:  screen.availHeight * 0.5 - height * 0.5
         }
     });
