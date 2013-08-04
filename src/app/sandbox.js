@@ -20,7 +20,6 @@
         loaderFrame.appendChild(loaderInner);
         loaderPop.appendChild(loaderFrame);
 
-    var fullscreen = false;
 
     /*---------------------------------------------------------------------------------*/
 
@@ -171,7 +170,8 @@
         group = panel.addGroup({label:'Audio Control'});
 
         group.addSubGroup({label:'File'})
-            .addButton('Load mp3',function(){parent.postMessage({type:'LOAD'},'*')},{label:'none'})
+            .addSelect(audioHandler,'modes',{label:'Mode',onChange:function(index){audioHandler.switchModeWithIndex(index);}})
+            .addButton('Load mp3',function(){console.log(audioHandler.mode);if(audioHandler.mode != 'MP3')return;parent.postMessage({type:'LOAD'},'*')},{label:'none'})
             .addSubGroup({label:'Magnitude'})
             .addValuePlotter(audioHandler,'magnitudeAvg',{label:'Avg',height:150})
             .addNumberOutput(audioHandler,'magnitudeAvg',{dp: 4})
@@ -216,7 +216,7 @@
                 document.body.appendChild(loaderPop);
 
                 var data = event.data;
-                audioHandler.loadAudioData(data.audioData,function(){document.body.removeChild(loaderPop);});
+                audioHandler.loadAudioDataSource(data.audioData,function(){document.body.removeChild(loaderPop);});
 
             }
                 break;
