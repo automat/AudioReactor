@@ -45,12 +45,12 @@
                  .addNumberInput(audioGrapher,'gridSize',{label:'Size'})
 
             group.addSubGroup({label:'Camera'})
-                 .addCheckbox(audioGrapher,'cameraAutoRotate',{label:'auto'})
-                 .addNumberInput(audioGrapher,'cameraTimeDeltaScale',{label:'delta scale'})
+                 .addSelect(audioGrapher,'cameraPresets',{label:'Preset',onChange:function(index){audioGrapher.updateCameraWithPreset(index)}})
                  .addCheckbox(audioGrapher,'cameraParametric',{label:'parametric'})
                  .addStringInput(audioGrapher,'cameraFuncXString',{label:'fx (t,m)',onChange:audioGrapher.updateCameraFunc.bind(audioGrapher)})
                  .addStringInput(audioGrapher,'cameraFuncYString',{label:'fy (t,m)',onChange:audioGrapher.updateCameraFunc.bind(audioGrapher)})
                  .addStringInput(audioGrapher,'cameraFuncZString',{label:'fz (t,m)',onChange:audioGrapher.updateCameraFunc.bind(audioGrapher)})
+                 .addNumberInput(audioGrapher,'cameraTimeDeltaScale',{label:'delta'})
 
         group.addSubGroup({label:'Room'})
                  .addCheckbox(audioGrapher,'solidRoomEnabled',{label:'enable'})
@@ -63,25 +63,8 @@
                  .addSlider(audioGrapher,'timeScale','timeScaleRange');
 
             group = panel.addGroup({label:'Lighting'});
-            group.addSubGroup({label:'Global',enable:false})
+            group.addSubGroup()
                  .addCheckbox(audioGrapher,'lightEnabled',{label:'enable'})
-                 .addSelect(audioGrapher,'lightGlobalPresets',{label:'Preset'})
-                 .addCheckbox(audioGrapher,'lightSetPosGlobal',{label:'Position'})
-                    .addNumberInput(audioGrapher,'lightPosGlobalX',{label:'X'})
-                    .addNumberInput(audioGrapher,'lightPosGlobalY',{label:'Y'})
-                    .addNumberInput(audioGrapher,'lightPosGlobalZ',{label:'Z'})
-                 .addCheckbox(audioGrapher,'lightSetColorAmbientGlobal',{label:'C Amb'})
-                    .addColor(audioGrapher,'lightColorAmbientGlobal',{label:' ',colorMode:'rgbfv'})
-                 .addCheckbox(audioGrapher,'lightSetColorDiffuseGlobal',{label:'C Dif'})
-                    .addColor(audioGrapher,'lightColorDiffuseGlobal',{label:' ',colorMode:'rgbfv'})
-                 .addCheckbox(audioGrapher,'lightSetColorSpecularGlobal',{label:'C Spe'})
-                    .addColor(audioGrapher,'lightColorSpecularGlobal',{label:' ',colorMode:'rgbfv'})
-                 .addCheckbox(audioGrapher,'lightSetAttConstantGlobal',{label:'Att Con'})
-                    .addNumberInput(audioGrapher,'lightAttConstantGlobal',{label:' '})
-                 .addCheckbox(audioGrapher,'lightSetAttLinearGlobal',{label:'Att Lin'})
-                    .addNumberInput(audioGrapher,'lightAttLinearGlobal',{label:' '})
-                 .addCheckbox(audioGrapher,'lightSetAttQuadraticGlobal',{label:'Att Qua'})
-                    .addNumberInput(audioGrapher,'lightAttQuadraticGlobal',{label:' '});
 
             group.addSubGroup({label:'Light 0'})
                  .addCheckbox(audioGrapher,'light0Enabled',{label:'enable'})

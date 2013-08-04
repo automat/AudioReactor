@@ -5,8 +5,6 @@ function AudioGrapher(element)
     this.setSize(window.innerWidth,window.innerHeight);
     this.setTargetFPS(60.0);
 
-
-
     /*---------------------------------------------------------------------------------*/
 
 
@@ -53,54 +51,38 @@ function AudioGrapher(element)
     this.timeScale       = 1.0;
     this.timeScaleRange  = [0.0,2.0];
 
-    this.lightEnabled                = true;
+    /*---------------------------------------------------------------------------------*/
 
-    this.lightGlobalPresets = ['Preset 1','Preset 2'];
 
-    this.lightSetPosGlobal           = true;
-    this.lightPosGlobalX             = 0;
-    this.lightPosGlobalY             = 0;
-    this.lightPosGlobalZ             = 0;
-    this.lightSetColorAmbientGlobal  = true;
-    this.lightColorAmbientGlobal     = [0.8,0.8,0.8];
-    this.lightSetColorDiffuseGlobal  = true;
-    this.lightColorDiffuseGlobal     = [1,1,1];
-    this.lightSetColorSpecularGlobal = true;
-    this.lightColorSpecularGlobal     = [1,1,1];
-    this.lightSetAttConstantGlobal   = true;
-    this.lightAttConstantGlobal      = 1.0;
-    this.lightSetAttLinearGlobal     = true;
-    this.lightAttLinearGlobal        = 0.0;
-    this.lightSetAttQuadraticGlobal  = true;
-    this.lightAttQuadraticGlobal     = 0.0;
+    this.lightEnabled = true;
 
     this.lightPresets = ['Purple static float',
                          'Red quad float long',
-                         'White cirlce float short'];
+                         'White circle float short'];
 
     this._lightPresets = [{ambient:[0,0,0],diffuse:[1.0,0,1.0],specular:[1,1,1],
                            funcXString:'0',funcYString:'abs(sin(t))*0.25',funcZString:'0',
-                           uncAttConString:'1',funcAttLinString:'0',funcAttQuaString:'0.01'},
+                           funcAttConString:'1',funcAttLinString:'0',funcAttQuaString:'0.01'},
 
                           {ambient:[0,0,0],diffuse:[1.0,0,0],specular:[1,1,1],
-                           funcXString:'cos(t*4)*2',funcYString:'abs(sin(t))*0.25',funcZString:'abs(sin(t*4))',
+                           funcXString:'cos(t*4)*2',funcYString:'abs(sin(t))*0.25',funcZString:'sin(t*4)*2',
                            funcAttConString:'1',funcAttLinString:'0',funcAttQuaString:'0.01'},
 
                           {ambient:[0,0,0],diffuse:[204/255,204/255,204/255],specular:[1,1,1],
                            funcXString:'cos(t*8)*0.25',funcYString:'0.01',funcZString:'sin(t*8)*0.25',
                            funcAttConString:'1',funcAttLinString:'0',funcAttQuaString:'0.01'}];
 
-    this.light0Enabled      = true;
-    this.light0Show         = false;
-    this.light0Ambient      = [light0.ambient[0],light0.ambient[1],light0.ambient[2]];
-    this.light0Diffuse      = [light0.diffuse[0],light0.diffuse[1],light0.diffuse[2]];
-    this.light0Specular     = [light0.specular[0],light0.specular[1],light0.specular[2]];
+    this.light0Enabled  = true;
+    this.light0Show     = false;
+    this.light0Ambient  = [light0.ambient[0],light0.ambient[1],light0.ambient[2]];
+    this.light0Diffuse  = [light0.diffuse[0],light0.diffuse[1],light0.diffuse[2]];
+    this.light0Specular = [light0.specular[0],light0.specular[1],light0.specular[2]];
 
-    this.light1Enabled      = false;
-    this.light1Show         = false;
-    this.light1Ambient      = [light1.ambient[0],light1.ambient[1],light1.ambient[2]];
-    this.light1Diffuse      = [light1.diffuse[0],light1.diffuse[1],light1.diffuse[2]];
-    this.light1Specular     = [light1.specular[0],light1.specular[1],light1.specular[2]];
+    this.light1Enabled  = false;
+    this.light1Show     = false;
+    this.light1Ambient  = [light1.ambient[0],light1.ambient[1],light1.ambient[2]];
+    this.light1Diffuse  = [light1.diffuse[0],light1.diffuse[1],light1.diffuse[2]];
+    this.light1Specular = [light1.specular[0],light1.specular[1],light1.specular[2]];
 
     this.light2Enabled      = false;
     this.light2Show         = false;
@@ -109,29 +91,29 @@ function AudioGrapher(element)
     this.light2Specular     = [light2.specular[0],light2.specular[1],light2.specular[2]];
 
 
-    this.light0FuncXString = light0.position[0] + '';
-    this.light0FuncYString = light0.position[1] + '';
-    this.light0FuncZString = light0.position[2] + '';
+    this.light0FuncXString      = light0.position[0] + '';
+    this.light0FuncYString      = light0.position[1] + '';
+    this.light0FuncZString      = light0.position[2] + '';
     this.light0FuncAttConString = light0.constantAttentuation + '';
     this.light0FuncAttLinString = light0.linearAttentuation   + '';
     this.light0FuncAttQuaString = light0.quadricAttentuation  + '';
-    this._light0i = 0;
+    this._light0i               = 0;
 
-    this.light1FuncXString = light1.position[0] + '';
-    this.light1FuncYString = light1.position[1] + '';
-    this.light1FuncZString = light1.position[2] + '';
+    this.light1FuncXString      = light1.position[0] + '';
+    this.light1FuncYString      = light1.position[1] + '';
+    this.light1FuncZString      = light1.position[2] + '';
     this.light1FuncAttConString = light1.constantAttentuation + '';
     this.light1FuncAttLinString = light1.linearAttentuation   + '';
     this.light1FuncAttQuaString = light1.quadricAttentuation  + '';
-    this._light1i = 1/3;
+    this._light1i               = 1/3;
 
-    this.light2FuncXString = light2.position[0] + '';
-    this.light2FuncYString = light2.position[1] + '';
-    this.light2FuncZString = light2.position[2] + '';
+    this.light2FuncXString      = light2.position[0] + '';
+    this.light2FuncYString      = light2.position[1] + '';
+    this.light2FuncZString      = light2.position[2] + '';
     this.light2FuncAttConString = light2.constantAttentuation + '';
     this.light2FuncAttLinString = light2.linearAttentuation   + '';
     this.light2FuncAttQuaString = light2.quadricAttentuation  + '';
-    this._light2i = 2/3;
+    this._light2i               = 2/3;
 
     this._light0FuncX = this.light0FuncY = this._light0FuncZ =
     this._light1FuncX = this.light1FuncY = this._light1FuncZ =
@@ -151,19 +133,30 @@ function AudioGrapher(element)
 
     /*---------------------------------------------------------------------------------*/
 
-    var camera = this.camera;
+    this.cameraPresets =
+    [
+        'Top View',
+        'Rotate Low',
+        'Static Angle',
+        'Float Angle'
+    ];
 
     this.cameraZoom = 1.0;
-    this.cameraAutoRotate     = true;
     this.cameraTimeDeltaScale = 0.25;
-    this.cameraParametric     = false;
+    this.cameraParametric     = true;
 
-    this.cameraFuncXString = camera.position[0] + '';
-    this.cameraFuncYString = camera.position[1] + '';
-    this.cameraFuncZString = camera.position[2] + '';
-
+    this.cameraFuncXString = this.cameraFuncYString = this.cameraFuncZString = null;
     this._cameraFuncX = this._cameraFuncY = this._cameraFuncY = null;
 
+    this._cameraPresets =
+    [
+        {funcXString:'0',funcYString:'5 * z',funcZString:'0.01'},
+        {funcXString:'2 * cos(t) * z',funcYString:'z',funcZString:'2 * sin(t) * z'},
+        {funcXString:'z',funcYString:'z',funcZString:'z'},
+        {funcXString:'1',funcYString:'z',funcZString:'1'}
+    ];
+
+    this.updateCameraWithPreset(1);
 
     /*---------------------------------------------------------------------------------*/
 
@@ -180,51 +173,82 @@ function AudioGrapher(element)
     this.surfaceIntrpl       = 0.0;
     this.surfaceIntrplMinMax = [0.0,1.0];
 
-    this.surfacePresets = ['Plane','Torus','Sphere', 'Cylinder','Disc', 'Cube', 'Unnamed'];
+    this.surfacePresets = ['Plane',
+                           'Torus',
+                           'Sphere',
+                           'Cylinder',
+                           'Disc',
+                           'Cube',
+                           'Unnamed',
+                           'Drop',
+                           'Diffuse Plane 0',
+                           'Diffuse Plane 1'];
 
 
 
     this._surfacePresets =
     [
-        {funcXString:'u',funcYString:'0',funcZString:'v',
-         funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-         funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-         uRange:[-1,1],vRange:[-1,1]},
+        {funcXString: 'u', funcYString: '0', funcZString: 'v',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [-1, 1], vRange: [-1, 1]},
 
-        {funcXString:'cos(v)*(1+0.25*cos(u))',funcYString:'0.25*sin(u)',funcZString:'sin(v)*(1+0.25*cos(u))',
-         funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-         funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-         uRange:[0,2*Math.PI],vRange:[0,2*Math.PI]},
+        {funcXString: 'cos(v)*(1+0.25*cos(u))', funcYString: '0.25*sin(u)', funcZString: 'sin(v)*(1+0.25*cos(u))',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, 2 * Math.PI], vRange: [0, 2 * Math.PI]},
 
-        {funcXString:'0.5 * sin(v) * cos(u)',funcYString:'0.5 * sin(v) * sin(u)',funcZString:'0.5 * cos(v)',
-         funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-         funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-         uRange:[0,Math.PI],vRange:[0,2*Math.PI]},
+        {funcXString: '0.5 * sin(v) * cos(u)', funcYString: '0.5 * sin(v) * sin(u)', funcZString: '0.5 * cos(v)',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, Math.PI], vRange: [0, 2 * Math.PI]},
 
-        {funcXString:'0.5 * cos(u)',funcYString:'0.5 * v - 0.5',funcZString:'0.5 * sin(u)',
-         funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-         funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-         uRange:[0,2*Math.PI],vRange:[0,2]},
+        {funcXString: '0.5 * cos(u)', funcYString: '0.5 * v - 0.5', funcZString: '0.5 * sin(u)',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, 2 * Math.PI], vRange: [0, 2]},
 
-        {funcXString:'0.25*cos(v)*cos(u)',funcYString:'0',funcZString:'0.25*sin(v)*cos(u)',
-         funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-         funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-         uRange:[0,Math.PI * 0.5],vRange:[0,Math.PI * 2]},
-
-
-
-        {funcXString:'(0.5*sin(u)*cos(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
-         funcYString:'(0.5*sin(u)*sin(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
-         funcZString:'(0.5*cos(u))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
-            funcXScaleString:'1',funcYScaleString:'1',funcZScaleString:'1',
-            funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-            uRange:[0,Math.PI * 2],vRange:[0,Math.PI]},
+        {funcXString: '0.25*cos(v)*cos(u)', funcYString: '0', funcZString: '0.25*sin(v)*cos(u)',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, Math.PI * 0.5], vRange: [0, Math.PI * 2]},
 
 
-        {funcXString:'u',funcYString:'1',funcZString:'v',
-            funcXScaleString:'10 + 3 * m',funcYScaleString:'1+sin(bv*bu*20)*cos(v)',funcZScaleString:'10 + 3 * m',
-            funcXTransString:'0',funcYTransString:'0',funcZTransString:'0',
-            uRange:[-1,1],vRange:[-1,1]}
+        {funcXString: '(0.5*sin(u)*cos(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+            funcYString: '(0.5*sin(u)*sin(v))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+            funcZString: '(0.5*cos(u))/pow(pow(sin(u),6)*(pow(sin(v),6)+pow(cos(v),6))+pow(cos(u),6),1/6)',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, Math.PI * 2], vRange: [0, Math.PI]},
+
+
+        {funcXString: 'u', funcYString: '1', funcZString: 'v',
+            funcXScaleString: '10 + 3 * m', funcYScaleString: '1+sin(bv*bu*20)*cos(v)', funcZScaleString: '10 + 3 * m',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [-1, 1], vRange: [-1, 1]},
+
+        {funcXString: 'u*cos(v)',
+            funcYString: 'exp(-u*u*2*sin(t))*(sin(2*PI*u+t*10) - u*cos(3*v+t*10))',
+            funcZString: 'u*sin(v)',
+            funcXScaleString: '1', funcYScaleString: '1', funcZScaleString: '1',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [0, 2], vRange: [0, Math.PI * 2]},
+
+        {funcXString: 'u',
+            funcYString: 'sin(bv*bu*20)*cos(v)',
+            funcZString: 'v',
+            funcXScaleString: '7 + 3 * m', funcYScaleString: '1', funcZScaleString: '7 + 3 * m',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [-1,1], vRange: [-1,1]},
+
+        {funcXString: 'u',
+            funcYString: 'pow(sin(bv*bu*20),2)*4*cos(v)',
+            funcZString: 'v',
+            funcXScaleString: '13 + 10 * m', funcYScaleString: '1', funcZScaleString: '13 + 10 * m',
+            funcXTransString: '0', funcYTransString: '0', funcZTransString: '0',
+            uRange: [-1,1], vRange: [-1,1]},
+
+
     ];
 
     this.surface0FuncYString = this.surface1FuncYString = '0';
@@ -263,8 +287,7 @@ function AudioGrapher(element)
 
     this.updateSurfaceObjFunc();
 
-
-
+    /*---------------------------------------------------------------------------------*/
 
     var surfaceSize = this.surfaceSize = 100;
     var surface     = this._surface    = new Surface(surfaceSize);
@@ -316,21 +339,18 @@ function AudioGrapher(element)
 
         });
         */
+
+    this._ready = true;
 }
-
-
 
 AudioGrapher.prototype = Object.create(GLKit.Application.prototype);
 
-
 /*---------------------------------------------------------------------------------*/
-
-
-
-
 
 AudioGrapher.prototype.update = function()
 {
+    if(!this._ready)return;
+
     var gl        = this.gl,
         cam       = this.camera,
         time      = this.getSecondsElapsed() * this.timeScale,
@@ -356,30 +376,25 @@ AudioGrapher.prototype.update = function()
 
 
     //TODO:FIX
-    if(this.isKeyDown() && this.isMouseDown() )
+    if(this.isMouseDown() && !this.cameraParametric)
     {
         camRotX = ( -1 + this.mouse.getX() / this.glWindow.getWidth() * 2.0 ) * Math.PI;
         camRotY = ( -1 + this.mouse.getY() / this.glWindow.getHeight() * 2.0) * Math.PI;
-
 
         GLKit.Vec3.lerp3f(cam.position,
                           Math.cos(camRotX) * zoom,
                           Math.sin(camRotY) * zoom,
                           Math.sin(camRotX) * zoom,
                           timeDelta * this.cameraTimeDeltaScale);
-    }
-    else if(this.cameraAutoRotate && !this.cameraParametric)
-    {
-        cam.setPosition3f(Math.cos(time)*zoom,zoom,Math.sin(time)*zoom);
 
     }
-    else if(!this.cameraAutoRotate && this.cameraParametric)
+    else if(this.cameraParametric)
     {
         try
         {
-            cam.setPosition3f(this._cameraFuncX(time,magAvg),
-                              this._cameraFuncY(time,magAvg),
-                              this._cameraFuncZ(time,magAvg));
+            cam.setPosition3f(this._cameraFuncX(time,magAvg,zoom),
+                              this._cameraFuncY(time,magAvg,zoom),
+                              this._cameraFuncZ(time,magAvg,zoom));
 
         }
         catch (e){}
@@ -727,12 +742,6 @@ AudioGrapher.prototype.update = function()
     gl.useLighting(false);
 };
 
-AudioGrapher.prototype.__update = function()
-{
-
-}
-
-
 
 AudioGrapher.prototype.setMagnitudeAvg = function(val)
 {
@@ -752,7 +761,9 @@ AudioGrapher.prototype.setMagnitudeAvg = function(val)
 
 AudioGrapher.prototype.onSurfaceSizeChange = function()
 {
-    this.surfaceSize = this.surfaceSize < 1 ? 1 : this.surfaceSize;
+    this.surfaceSize = this.surfaceSize < 1 ? 1 :
+                       this.surfaceSize > 150 ? 150 :
+                       this.surfaceSize;
 
     var surface = this._surface;
         surface.setSize(this.surfaceSize);
@@ -930,9 +941,9 @@ AudioGrapher.prototype.updateCameraFunc = function()
 {
     try
     {
-        this._cameraFuncX =  new Function('t','m','return ' + this.cameraFuncXString);
-        this._cameraFuncY =  new Function('t','m','return ' + this.cameraFuncYString);
-        this._cameraFuncZ =  new Function('t','m','return ' + this.cameraFuncZString);
+        this._cameraFuncX =  new Function('t','m','z','return ' + this.cameraFuncXString);
+        this._cameraFuncY =  new Function('t','m','z','return ' + this.cameraFuncYString);
+        this._cameraFuncZ =  new Function('t','m','z','return ' + this.cameraFuncZString);
     }
     catch (e){}
 };
@@ -1002,6 +1013,17 @@ AudioGrapher.prototype.updateSurface0WithPreset = function(index)
 
     this.updateSurfaceFunc();
 };
+
+AudioGrapher.prototype.updateCameraWithPreset = function(index)
+{
+    var preset = this._cameraPresets[index];
+
+    this.cameraFuncXString = preset.funcXString;
+    this.cameraFuncYString = preset.funcYString;
+    this.cameraFuncZString = preset.funcZString;
+
+    this.updateCameraFunc();
+}
 
 AudioGrapher.prototype.updateSurface1WithPreset = function(index)
 {
